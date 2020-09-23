@@ -11,7 +11,14 @@ Created on Wed Sep 23 07:02:58 2020
 class NeuralNetwork:
     
     # initialize the neural network
-    def __init__(self):
+    def __init__(self, numInputNodes, numHiddenNodes, numOutputNodes, learningRate):
+        # set number of nodes in each input, hidden, output layer
+        self.inodes = numInputNodes
+        self.hnodes = numHiddenNodes
+        self.onodes = numOutputNodes
+        
+        # learning rate
+        self.lr = learningRate
         pass
     
     # train the neural network
