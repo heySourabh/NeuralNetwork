@@ -26,9 +26,10 @@ class NeuralNetwork:
         # from node i to node j in the next layer
         # w11 w21
         # w12 w22 etc.
-        self.wih = np.random.rand(self.hnodes, self.inodes) - 0.5
-        self.who = np.random.rand(self.onodes, self.hnodes) - 0.5
-        
+        self.wih = np.random.normal(0.0, 1.0 / np.sqrt(self.inodes),
+                                    (self.hnodes, self.inodes))
+        self.who = np.random.normal(0.0, 1.0 / np.sqrt(self.hnodes), 
+                                    (self.onodes, self.hnodes))
         pass
     
     # train the neural network
