@@ -17,8 +17,11 @@ def main():
     learning_rate = 0.3
     
     # create instance of neural network
-    n = nn.NeuralNetwork(input_nodes, hidden_nodes, 
+    neuralNetwork = nn.NeuralNetwork(input_nodes, hidden_nodes, 
                          output_nodes, learning_rate)
+    
+    print(neuralNetwork.query([5, 1, -8]))
+    
 
 if __name__ == "__main__":
     main()

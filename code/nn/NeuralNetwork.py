@@ -7,6 +7,7 @@ Created on Wed Sep 23 07:02:58 2020
 """
 
 import numpy as np
+import scipy.special
 
 # Neural network class definition
 class NeuralNetwork:
@@ -30,6 +31,10 @@ class NeuralNetwork:
                                     (self.hnodes, self.inodes))
         self.who = np.random.normal(0.0, 1.0 / np.sqrt(self.hnodes), 
                                     (self.onodes, self.hnodes))
+        
+        # activation function is the sigmoid function
+        self.activation_function = lambda x: scipy.special.expit(x)
+        
         pass
     
     # train the neural network
@@ -37,5 +42,18 @@ class NeuralNetwork:
         pass
     
     # query the neural network
-    def query(self):
-        pass
+    def query(self, inputs_list):
+        # convert inputs list to 2d array
+        inputs = np.array(inputs_list, ndmin=2).T
+        
+        # calculate signals into hidden layer
+        hidden_inputs = np.dot(self.wih, inputs)
+        # calculate the signals emerging from hidden layer
+        hidden_outputs = self.activation_function(hidden_inputs)
+        
+        # calculate signals into final output layer
+        final_inputs = np.dot(self.who, hidden_outputs)
+        # calculate signals emerging from the final output layer
+        final_outputs = self.activation_function(final_inputs)
+        
+        return final_outputs
