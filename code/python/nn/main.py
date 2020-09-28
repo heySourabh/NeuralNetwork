@@ -6,6 +6,7 @@ Created on Wed Sep 23 07:15:22 2020
 @author: Sourabh Bhat ( https://spbhat.in/ )
 """
 import NeuralNetwork as nn
+import Display as display
 
 def main():
     # number of input, hidden and output nodes
@@ -20,7 +21,13 @@ def main():
     neuralNetwork = nn.NeuralNetwork(input_nodes, hidden_nodes, 
                          output_nodes, learning_rate)
     
-    print(neuralNetwork.query([5, 1, -8]))
+    # read MNIST data
+    data_file = open("mnist_dataset/mnist_train_100.csv")
+    data_list = data_file.readlines()
+    data_file.close()
+    
+    # plot MNIST data
+    display.showDigit(data_list[1])
     
 
 if __name__ == "__main__":
