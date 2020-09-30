@@ -53,7 +53,7 @@ class NeuralNetwork:
         # calculate signals emerging from the final output layer
         final_outputs = self.activation_function(final_inputs)
         
-        # error is the (target - actual)
+        # output layer error is the (target - actual)
         output_errors = targets - final_outputs
         
         # hidden layer error is the output_errors, split by weights 

@@ -41,7 +41,21 @@ def main():
         # all_values[0] is the desired label for this record
         targets[int(all_values[0])] = 0.99
         neuralNetwork.train(inputs, targets)
-        
+    
+    # load the MNIST test data CSV file into a list
+    test_data_file = open("mnist_dataset/mnist_test_10.csv", 'r')
+    test_data_list = test_data_file.readlines()
+    test_data_file.close()
+    
+    # get test record
+    test_data = test_data_list[0]
+    all_values = test_data.split(',')
+    # display the record
+    display.showDigit(test_data)
+    
+    inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
+    print(neuralNetwork.query(inputs))
+    
 
 if __name__ == "__main__":
     main()
