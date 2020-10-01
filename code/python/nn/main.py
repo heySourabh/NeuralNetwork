@@ -47,15 +47,34 @@ def main():
     test_data_list = test_data_file.readlines()
     test_data_file.close()
     
-    # get test record
-    test_data = test_data_list[0]
-    all_values = test_data.split(',')
-    # display the record
-    display.showDigit(test_data)
+    # test the neural network
+    # scorecard for how well the network performs, initially empty
+    scorecard = []
     
-    inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
-    print(neuralNetwork.query(inputs))
+    # go through all the records in the test data set
+    for record in test_data_list:
+        all_values = record.split(',')
+        # correct answer is first value
+        correct_label = int(all_values[0])
+        print(correct_label, "correct label")
+        # scale and shift the inputs
+        inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
+        # query the network
+        outputs = neuralNetwork.query(inputs)
+        # the index of the highest value corresponds to the label
+        label = np.argmax(outputs)
+        print(label, "network's answer\n")
+        # append correct or incorrect to list
+        if (label == correct_label):
+            scorecard.append(1)
+        else:
+            scorecard.append(0)
     
+    print(scorecard)
+    
+    # calculate the performance score, the fraction of correct answers
+    scorecard_array = np.asarray(scorecard)
+    print("performance =", scorecard_array.sum() / scorecard_array.size)
 
 if __name__ == "__main__":
     main()
