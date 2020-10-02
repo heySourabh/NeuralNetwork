@@ -16,14 +16,15 @@ def main():
     output_nodes = 10
     
     # learning rate
-    learning_rate = 0.3
+    learning_rate = 0.2
     
     # create instance of neural network
     neuralNetwork = nn.NeuralNetwork(input_nodes, hidden_nodes, 
                          output_nodes, learning_rate)
     
+    print("Training...")
     # load the MNIST training data CSV file into a list
-    training_data_file = open("mnist_dataset/mnist_train_100.csv", 'r')
+    training_data_file = open("../../../mnist_dataset/mnist_train.csv", 'r')
     training_data_list = training_data_file.readlines()
     training_data_file.close()
     
@@ -42,8 +43,9 @@ def main():
         targets[int(all_values[0])] = 0.99
         neuralNetwork.train(inputs, targets)
     
+    print("Testing...")
     # load the MNIST test data CSV file into a list
-    test_data_file = open("mnist_dataset/mnist_test_10.csv", 'r')
+    test_data_file = open("../../../mnist_dataset/mnist_test.csv", 'r')
     test_data_list = test_data_file.readlines()
     test_data_file.close()
     
@@ -56,21 +58,21 @@ def main():
         all_values = record.split(',')
         # correct answer is first value
         correct_label = int(all_values[0])
-        print(correct_label, "correct label")
+        # print(correct_label, "correct label")
         # scale and shift the inputs
         inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
         # query the network
         outputs = neuralNetwork.query(inputs)
         # the index of the highest value corresponds to the label
         label = np.argmax(outputs)
-        print(label, "network's answer\n")
+        # print(label, "network's answer\n")
         # append correct or incorrect to list
         if (label == correct_label):
             scorecard.append(1)
         else:
             scorecard.append(0)
     
-    print(scorecard)
+    # print(scorecard)
     
     # calculate the performance score, the fraction of correct answers
     scorecard_array = np.asarray(scorecard)
