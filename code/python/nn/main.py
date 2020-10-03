@@ -16,13 +16,16 @@ def main():
     output_nodes = 10
     
     # learning rate
-    learning_rate = 0.2
+    learning_rate = 0.1
+    
+    # epochs is the number of times the training data is used for training
+    epochs = 7
     
     # create instance of neural network
     neuralNetwork = nn.NeuralNetwork(input_nodes, hidden_nodes, 
                          output_nodes, learning_rate)
     
-    print("Training...")
+    print("\nTraining...")
     # load the MNIST training data CSV file into a list
     training_data_file = open("../../../mnist_dataset/mnist_train.csv", 'r')
     training_data_list = training_data_file.readlines()
@@ -31,17 +34,18 @@ def main():
     # plot MNIST data
     # display.showDigit(training_data_list[1])
     
-    # train the neural network: 
-    # go through all records in the training data set
-    for record in training_data_list:
-        all_values = record.split(',')
-        # scale and shift the inputs
-        inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
-        # create target output values (0.99 for desired label, 0.01 otherwise)
-        targets = np.zeros(output_nodes) + 0.01
-        # all_values[0] is the desired label for this record
-        targets[int(all_values[0])] = 0.99
-        neuralNetwork.train(inputs, targets)
+    # train the neural network:     
+    for e in range(epochs):
+        # go through all records in the training data set
+        for record in training_data_list:
+            all_values = record.split(',')
+            # scale and shift the inputs
+            inputs = np.asfarray(all_values[1:]) / 255.0 * 0.99 + 0.01
+            # create target output values (0.99 for desired label, 0.01 otherwise)
+            targets = np.zeros(output_nodes) + 0.01
+            # all_values[0] is the desired label for this record
+            targets[int(all_values[0])] = 0.99
+            neuralNetwork.train(inputs, targets)
     
     print("Testing...")
     # load the MNIST test data CSV file into a list
@@ -76,7 +80,9 @@ def main():
     
     # calculate the performance score, the fraction of correct answers
     scorecard_array = np.asarray(scorecard)
-    print("performance =", scorecard_array.sum() / scorecard_array.size)
+    print("learning rate =", learning_rate, 
+          ", epochs =", epochs, 
+          ", performance =", scorecard_array.sum() / scorecard_array.size)
 
 if __name__ == "__main__":
     main()
