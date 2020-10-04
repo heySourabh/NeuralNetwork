@@ -12,7 +12,7 @@ import numpy as np
 def main():
     # number of input, hidden and output nodes
     input_nodes = 28 * 28
-    hidden_nodes = 100
+    hidden_nodes = 200
     output_nodes = 10
     
     # learning rate
@@ -80,7 +80,8 @@ def main():
     
     # calculate the performance score, the fraction of correct answers
     scorecard_array = np.asarray(scorecard)
-    print("learning rate =", learning_rate, 
+    print("hiddden nodes =", hidden_nodes, 
+        ", learning rate =", learning_rate, 
           ", epochs =", epochs, 
           ", performance =", scorecard_array.sum() / scorecard_array.size)
 
