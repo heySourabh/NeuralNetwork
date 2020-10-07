@@ -5,3 +5,6 @@
 
 ## Change in performance with epochs and learning rate
 ![Change in performance with epochs and learning rate](performance_lr_epochs.png)
+
+## Change in performance with epochs and learning rate
+![Change in performance with hidden nodes and learning rate](performance_lr_hiddennodes.png)
