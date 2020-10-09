@@ -4,6 +4,8 @@
 
 package in.spbhat;
 
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         int inputNodes = 3;
@@ -12,6 +14,6 @@ public class Main {
         double learningRate = 0.3;
 
         var neuralNetwork = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
-        System.out.println(neuralNetwork);
+        System.out.println(Arrays.toString(neuralNetwork.query(new double[]{1, 2, 3})));
     }
 }
