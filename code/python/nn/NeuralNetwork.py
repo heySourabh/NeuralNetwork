@@ -88,3 +88,9 @@ class NeuralNetwork:
         final_outputs = self.activation_function(final_inputs)
         
         return final_outputs
+
+
+if __name__ == "__main__":
+    nn = NeuralNetwork(3, 3, 3, 0.3)
+    print(nn.query([1, 2, 3]))
+    print("test")
