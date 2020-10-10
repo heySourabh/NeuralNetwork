@@ -8,8 +8,10 @@ Created on Wed Sep 23 07:15:22 2020
 import NeuralNetwork as nn
 import Display as display
 import numpy as np
+import time
 
 def main():
+    start = time.time()
     # number of input, hidden and output nodes
     input_nodes = 28 * 28
     hidden_nodes = 200
@@ -19,7 +21,7 @@ def main():
     learning_rate = 0.1
     
     # epochs is the number of times the training data is used for training
-    epochs = 7
+    epochs = 5
     
     # create instance of neural network
     neuralNetwork = nn.NeuralNetwork(input_nodes, hidden_nodes, 
@@ -84,6 +86,8 @@ def main():
         ", learning rate =", learning_rate, 
           ", epochs =", epochs, 
           ", performance =", scorecard_array.sum() / scorecard_array.size)
+    stop = time.time()
+    print(stop - start, "seconds.")
 
 if __name__ == "__main__":
     main()
