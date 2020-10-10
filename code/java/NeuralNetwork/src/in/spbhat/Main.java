@@ -14,6 +14,6 @@ public class Main {
         double learningRate = 0.3;
 
         var neuralNetwork = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
-        System.out.println(Arrays.toString(neuralNetwork.query(new double[]{1, 2, 3})));
+        System.out.println(Arrays.toString(neuralNetwork.query(new double[]{1, 0.5, -1.5})));
     }
 }
