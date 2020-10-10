@@ -2,7 +2,7 @@ package in.spbhat.util;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.function.UnaryOperator;
+import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,14 +23,14 @@ public class DoubleMatrix {
         return apply(create(rows, cols), x -> generator.nextGaussian() * sigma + mean);
     }
 
-    public static double[][] apply(double[][] matrix, UnaryOperator<Double> operator) {
+    public static double[][] apply(double[][] matrix, DoubleUnaryOperator operator) {
         int numRows = matrix.length;
         int numCols = matrix[0].length;
 
         final double[][] newMatrix = create(numRows, numCols);
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                newMatrix[i][j] = operator.apply(matrix[i][j]);
+                newMatrix[i][j] = operator.applyAsDouble(matrix[i][j]);
             }
         }
 
