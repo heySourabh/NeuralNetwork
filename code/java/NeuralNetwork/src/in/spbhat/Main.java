@@ -21,20 +21,23 @@ public class Main {
         int hiddenNodes = 100;
         int outputNodes = 10;
         double learningRate = 0.3;
+        int epochs = 5;
 
         var neuralNetwork = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
-        System.out.println("Training network");
-        try (Scanner trainDataFile = new Scanner(new File("mnist_dataset/mnist_train_100.csv"))) {
-            while (trainDataFile.hasNextLine()) {
-                MNISTData trainData = new MNISTData(trainDataFile.nextLine());
-                double[] inputs = apply(trainData.getData1D(), e -> e * 0.99 + 0.01);
-                double[] targets = newFilledArray(outputNodes, 0.01);
-                targets[trainData.getLabel()] = 0.99;
-                neuralNetwork.train(inputs, targets);
+        System.out.println("Training network...");
+        for (int epoch = 0; epoch < epochs; epoch++) {
+            try (Scanner trainDataFile = new Scanner(new File("mnist_dataset/mnist_train_100.csv"))) {
+                while (trainDataFile.hasNextLine()) {
+                    MNISTData trainData = new MNISTData(trainDataFile.nextLine());
+                    double[] inputs = apply(trainData.getData1D(), e -> e * 0.99 + 0.01);
+                    double[] targets = newFilledArray(outputNodes, 0.01);
+                    targets[trainData.getLabel()] = 0.99;
+                    neuralNetwork.train(inputs, targets);
+                }
             }
         }
 
-        System.out.println("Testing network");
+        System.out.println("Testing network...");
         List<Integer> scorecard = new ArrayList<>();
         try (Scanner testDataFile = new Scanner(new File("mnist_dataset/mnist_test_10.csv"))) {
             while (testDataFile.hasNextLine()) {
@@ -44,11 +47,12 @@ public class Main {
                 int networkLabel = getLabel(outputs);
                 int correctLabel = testData.getLabel();
                 scorecard.add(networkLabel == correctLabel ? 1 : 0);
-                System.out.println("Correct label = " + correctLabel);
-                System.out.println("Network's label = " + networkLabel);
             }
         }
-        System.out.println(scorecard);
+        double performance = scorecard.stream()
+                .mapToDouble(i -> i)
+                .sum() / scorecard.size();
+        System.out.println("Performance = " + performance);
     }
 
     private static int getLabel(double[] output) {
