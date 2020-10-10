@@ -18,7 +18,7 @@ import static in.spbhat.util.DoubleMatrix.*;
 import static java.lang.Math.exp;
 
 public class NeuralNetwork {
-    private static final Random rng = new Random(31416);
+    private static final Random rng = new Random();
 
     private final int iNodes;
     private final int hNodes;
@@ -61,8 +61,6 @@ public class NeuralNetwork {
         op2 = new double[][]{inputs};
         changeWeights = multiply(multiply(transpose(op1), op2), learningRate);
         DoubleMatrix.copy(add(wih, changeWeights), wih);
-
-        System.out.println(stringify(who));
     }
 
     public double[] query(double[] inputs) {
