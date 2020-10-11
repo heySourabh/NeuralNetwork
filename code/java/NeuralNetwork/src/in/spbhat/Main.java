@@ -21,7 +21,7 @@ import static in.spbhat.util.DoubleArray.newFilledArray;
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         long timeStart = System.currentTimeMillis();
-        double performance = networkPerformance(100, 0.1, 1,
+        double performance = networkPerformance(200, 0.1, 5,
                 new File("../../../mnist_dataset/mnist_train.csv"),
                 new File("../../../mnist_dataset/mnist_test.csv"));
         System.out.println("Performance = " + performance);
