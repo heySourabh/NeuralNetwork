@@ -8,9 +8,12 @@ import in.spbhat.util.MNISTData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static in.spbhat.util.DoubleArray.apply;
 import static in.spbhat.util.DoubleArray.newFilledArray;
@@ -18,7 +21,7 @@ import static in.spbhat.util.DoubleArray.newFilledArray;
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         long timeStart = System.currentTimeMillis();
-        double performance = networkPerformance(200, 0.1, 5,
+        double performance = networkPerformance(100, 0.1, 1,
                 new File("../../../mnist_dataset/mnist_train.csv"),
                 new File("../../../mnist_dataset/mnist_test.csv"));
         System.out.println("Performance = " + performance);
@@ -33,16 +36,20 @@ public class Main {
 
         var neuralNetwork = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
         System.out.println("Training network...");
-        for (int epoch = 0; epoch < epochs; epoch++) {
-            try (Scanner trainDataScanner = new Scanner(trainDataFile)) {
-                while (trainDataScanner.hasNextLine()) {
-                    MNISTData trainData = new MNISTData(trainDataScanner.nextLine());
+        try {
+            final List<MNISTData> mnistDataList = Files.lines(trainDataFile.toPath())
+                    .map(MNISTData::new)
+                    .collect(Collectors.toUnmodifiableList());
+            for (int epoch = 0; epoch < epochs; epoch++) {
+                for (MNISTData trainData : mnistDataList) {
                     double[] inputs = apply(trainData.getData1D(), e -> e * 0.99 + 0.01);
                     double[] targets = newFilledArray(outputNodes, 0.01);
                     targets[trainData.getLabel()] = 0.99;
                     neuralNetwork.train(inputs, targets);
                 }
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         System.out.println("Testing network...");

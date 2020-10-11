@@ -4,16 +4,10 @@
 
 package in.spbhat;
 
-import in.spbhat.util.DoubleMatrix;
-
 import java.util.Random;
 
 import static in.spbhat.util.DoubleArray.apply;
-import static in.spbhat.util.DoubleArray.multiply;
 import static in.spbhat.util.DoubleArray.subtract;
-import static in.spbhat.util.DoubleArray.*;
-import static in.spbhat.util.DoubleMatrix.add;
-import static in.spbhat.util.DoubleMatrix.multiply;
 import static in.spbhat.util.DoubleMatrix.*;
 import static java.lang.Math.exp;
 
@@ -24,8 +18,8 @@ public class NeuralNetwork {
     private final int hNodes;
     private final int oNodes;
     private final double learningRate;
-    private final double[][] wih;
-    private final double[][] who;
+    private double[][] wih;
+    private double[][] who;
 
     public NeuralNetwork(int numInputNodes, int numHiddenNodes, int numOutputNodes, double learningRate) {
         this.iNodes = numInputNodes;
@@ -41,26 +35,15 @@ public class NeuralNetwork {
 
     public void train(double[] inputs, double[] targets) {
         double[] hiddenInputs = multiply(wih, inputs);
-        double[] hiddenOutputs = apply(hiddenInputs, this::sigmoid);
+        double[] hiddenOutputs = activationFunction(hiddenInputs);
         double[] finalInputs = multiply(who, hiddenOutputs);
-        double[] finalOutputs = apply(finalInputs, this::sigmoid);
+        double[] finalOutputs = activationFunction(finalInputs);
 
         double[] outputErrors = subtract(targets, finalOutputs);
         double[] hiddenErrors = multiply(transpose(who), outputErrors);
 
-        double[] ones = newFilledArray(finalOutputs.length, 1.0);
-        double[] oneMinusFinalOutputs = subtract(ones, finalOutputs);
-        double[][] op1 = {multiply(multiply(outputErrors, finalOutputs), oneMinusFinalOutputs)};
-        double[][] op2 = {hiddenOutputs};
-        double[][] changeWeights = multiply(multiply(transpose(op1), op2), learningRate);
-        DoubleMatrix.copy(add(who, changeWeights), who);
-
-        ones = newFilledArray(hiddenOutputs.length, 1.0);
-        double[] oneMinusHiddenOutputs = subtract(ones, hiddenOutputs);
-        op1 = new double[][]{multiply(multiply(hiddenErrors, hiddenOutputs), oneMinusHiddenOutputs)};
-        op2 = new double[][]{inputs};
-        changeWeights = multiply(multiply(transpose(op1), op2), learningRate);
-        DoubleMatrix.copy(add(wih, changeWeights), wih);
+        who = add(who, computeWeightsChange(hiddenOutputs, finalOutputs, outputErrors));
+        wih = add(wih, computeWeightsChange(inputs, hiddenOutputs, hiddenErrors));
     }
 
     public double[] query(double[] inputs) {
@@ -69,6 +52,40 @@ public class NeuralNetwork {
         double[] finalInputs = multiply(who, hiddenOutputs);
 
         return apply(finalInputs, this::sigmoid);
+    }
+
+    private double[][] computeWeightsChange(double[] inputs, double[] outputs, double[] outputErrors) {
+        int numOutputs = outputs.length;
+
+        double[] outputOp = new double[numOutputs];
+        for (int i = 0; i < numOutputs; i++) {
+            outputOp[i] = learningRate * outputErrors[i] * outputs[i] * (1.0 - outputs[i]);
+        }
+
+        return outerProduct(outputOp, inputs);
+    }
+
+    private double[][] outerProduct(double[] v1, double[] v2) {
+        int rows = v1.length;
+        int cols = v2.length;
+
+        double[][] matrix = new double[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = v1[i] * v2[j];
+            }
+        }
+
+        return matrix;
+    }
+
+    private double[] activationFunction(double[] x) {
+        double[] sigmoid = new double[x.length];
+        for (int i = 0; i < x.length; i++) {
+            sigmoid[i] = sigmoid(x[i]);
+        }
+        return sigmoid;
     }
 
     private double sigmoid(double x) {
