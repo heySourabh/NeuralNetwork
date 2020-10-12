@@ -28,11 +28,11 @@ public class DoubleMatrix {
         int numCols = matrix[0].length;
 
         final double[][] newMatrix = create(numRows, numCols);
-        for (int i = 0; i < numRows; i++) {
+        IntStream.range(0, numRows).forEach(i -> {
             for (int j = 0; j < numCols; j++) {
                 newMatrix[i][j] = operator.applyAsDouble(matrix[i][j]);
             }
-        }
+        });
 
         return newMatrix;
     }
@@ -47,11 +47,11 @@ public class DoubleMatrix {
 
         double[][] result = new double[numRows][numCols];
 
-        for (int i = 0; i < numRows; i++) {
+        IntStream.range(0, numRows).forEach(i -> {
             for (int j = 0; j < numCols; j++) {
                 result[i][j] = A[i][j] + B[i][j];
             }
-        }
+        });
 
         return result;
     }
@@ -137,13 +137,13 @@ public class DoubleMatrix {
 
         double[] result = new double[numRows];
 
-        for (int i = 0; i < numRows; i++) {
+        IntStream.range(0, numRows).forEach(i -> {
             double sum = 0.0;
             for (int j = 0; j < numCols; j++) {
                 sum += matrix[i][j] * vector[j];
             }
             result[i] = sum;
-        }
+        });
 
         return result;
     }
@@ -173,11 +173,11 @@ public class DoubleMatrix {
 
         double[][] result = new double[numCols][numRows];
 
-        for (int i = 0; i < numRows; i++) {
+        IntStream.range(0, numRows).forEach(i -> {
             for (int j = 0; j < numCols; j++) {
                 result[j][i] = matrix[i][j];
             }
-        }
+        });
 
         return result;
     }

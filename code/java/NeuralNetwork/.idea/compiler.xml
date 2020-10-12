@@ -9,8 +9,8 @@
         <module name="NeuralNetwork" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="NeuralNetwork" target="15" />
+    <bytecodeTargetLevel target="15">
+      <module name="NeuralNetwork" target="" />
     </bytecodeTargetLevel>
   </component>
 </project>
