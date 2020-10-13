@@ -41,6 +41,7 @@ public class Main {
                     .map(MNISTData::new)
                     .collect(Collectors.toUnmodifiableList());
             for (int epoch = 0; epoch < epochs; epoch++) {
+                System.out.print("Epoch:" + (epoch + 1) + "/" + epochs + "\r");
                 for (MNISTData trainData : mnistDataList) {
                     double[] inputs = apply(trainData.getData1D(), e -> e * 0.99 + 0.01);
                     double[] targets = newFilledArray(outputNodes, 0.01);
