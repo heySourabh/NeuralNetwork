@@ -7,6 +7,9 @@ package in.spbhat.util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 public class MNISTData {
@@ -47,7 +50,8 @@ public class MNISTData {
                 double[][] data2D = getData2D();
                 for (int y = 0; y < H; y++) {
                     for (int x = 0; x < W; x++) {
-                        final Color c = new Color((float) data2D[y][x], (float) data2D[y][x], (float) data2D[y][x]);
+                        float gray = (float) data2D[y][x];
+                        final Color c = new Color(gray, gray, gray);
                         image.setRGB(x, y, c.getRGB());
                     }
                 }
@@ -59,6 +63,7 @@ public class MNISTData {
         window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         window.setContentPane(container);
         window.pack();
+        window.setResizable(false);
         window.setVisible(true);
         window.setLocationRelativeTo(null);
     }
@@ -81,5 +86,14 @@ public class MNISTData {
             }
         }
         return data2D;
+    }
+
+    public static void main(String[] args) throws IOException {
+        // display the digit for visual testing
+        Files.lines(new File("mnist_dataset/mnist_train_100.csv").toPath())
+                .skip(0) // skip to look forward into the dataset
+                .findFirst()
+                .ifPresentOrElse(line -> new MNISTData(line).display(10),
+                        () -> System.out.println("No data available"));
     }
 }
